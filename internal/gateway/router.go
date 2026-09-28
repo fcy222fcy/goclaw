@@ -134,7 +134,7 @@ func (r *MethodRouter) registerDefaults() {
 // scope may call the given method. True only for the two tenant-provisioning
 // RPCs — see permissions.IsProvisionMethod.
 func provisionScopeAllowed(c *Client, method string) bool {
-	return c.HasScope(permissions.ScopeProvision) && permissions.IsProvisionMethod(method)
+	return permissions.HasProvisionScope(c.scopes) && permissions.IsProvisionMethod(method)
 }
 
 // --- Built-in handlers ---
