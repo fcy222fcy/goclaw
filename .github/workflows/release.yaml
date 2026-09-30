@@ -104,7 +104,7 @@ jobs:
           VERSION: v${{ needs.release.outputs.version }}
         run: |
           CGO_ENABLED=0 go build -tags embedui \
-            -ldflags="-s -w -X github.com/nextlevelbuilder/goclaw/cmd.Version=${VERSION}" \
+            -ldflags="-s -w -X github.com/nextlevelbuilder/goclaw/cmd.Version=${VERSION} -X github.com/nextlevelbuilder/goclaw/cmd.CommitSHA=${{ github.sha }}" \
             -o goclaw .
           tar -czf "goclaw-${{ needs.release.outputs.version }}-${{ matrix.goos }}-${{ matrix.goarch }}.tar.gz" goclaw migrations/ skills/
 
