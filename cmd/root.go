@@ -18,6 +18,15 @@ var Version = "dev"
 // unavailable (e.g. Docker builds, where .git is excluded from the context).
 var CommitSHA = "unknown"
 
+// commitSuffix returns " (commit <sha>)" when CommitSHA was injected at build
+// time, so version/doctor/upgrade output can carry release provenance.
+func commitSuffix() string {
+	if CommitSHA == "" || CommitSHA == "unknown" {
+		return ""
+	}
+	return " (commit " + CommitSHA + ")"
+}
+
 var (
 	cfgFile string
 	verbose bool
@@ -70,11 +79,7 @@ func versionCmd() *cobra.Command {
 		Use:   "version",
 		Short: "Print version information",
 		Run: func(cmd *cobra.Command, args []string) {
-			if CommitSHA != "" && CommitSHA != "unknown" {
-				fmt.Printf("goclaw %s (commit %s) (protocol %d)\n", Version, CommitSHA, protocol.ProtocolVersion)
-				return
-			}
-			fmt.Printf("goclaw %s (protocol %d)\n", Version, protocol.ProtocolVersion)
+			fmt.Printf("goclaw %s%s (protocol %d)\n", Version, commitSuffix(), protocol.ProtocolVersion)
 		},
 	}
 }
